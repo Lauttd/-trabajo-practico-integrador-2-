@@ -1,4 +1,3 @@
-import { timeStamp } from "console";
 import { Schema } from "mongoose";
 
 export const TagSchema = new Schema(
