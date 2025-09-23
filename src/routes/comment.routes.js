@@ -7,4 +7,4 @@ commentRoutes.post("/comment", createComment);
 commentRoutes.get("/comment", getAllComment);
 commentRoutes.get("/comment", getByIdComment);
 commentRoutes.put("/comment", updateComment);
-commentRoutes("/comment", deleteComment);
+commentRoutes.delete("/comment", deleteComment);

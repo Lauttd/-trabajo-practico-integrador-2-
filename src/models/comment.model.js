@@ -1,5 +1,4 @@
-import { Schema } from "mongoose";
-import { scheduler } from "timers/promises";
+import { Schema, model } from "mongoose";
 
 export const CommentSchema = new Schema(
     {
@@ -20,4 +19,4 @@ export const CommentSchema = new Schema(
     },
 );
 
-export const CommentModel = mongoose.model("comment", CommentSchema);
+export const CommentModel = model("comment", CommentSchema);

@@ -1,4 +1,4 @@
-import { ArticleModel } from "src/models/ArticleModel.js"
+// import { ArticleModel } from "src/models/ArticleModel.js"
 
 export const createArticle = async (req, res) => {
     try {

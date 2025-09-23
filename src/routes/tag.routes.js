@@ -3,8 +3,8 @@ import { createTag, getAllTag, getByIdTag, updateTag, deleteTag } from "../contr
 
 export const tagRoutes = Router();
 
-tagRouter.post("/tag", createTag);
-tagRouter.get("/tag", getAllTag);
-tagRouter.get("/tag", getByIdTag);
-tagRouter.put("/tag", updateTag);
-tagRouter.delete("/tag", deleteTag);
+tagRoutes.post("/tag", createTag);
+tagRoutes.get("/tag", getAllTag);
+tagRoutes.get("/tag", getByIdTag);
+tagRoutes.put("/tag", updateTag);
+tagRoutes.delete("/tag", deleteTag);

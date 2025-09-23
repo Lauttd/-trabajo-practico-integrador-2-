@@ -1,8 +1,5 @@
-import { kMaxLength } from "buffer";
-import { profile } from "console";
-import { Schema } from "mongoose";
-import { type } from "os";
-import { stringify } from "querystring";
+import { Schema, model } from "mongoose";
+
 
 export const UserSchema = new Schema(
     {
@@ -49,4 +46,4 @@ export const UserSchema = new Schema(
     },
 );
 
-export const UserModel = mongoose.model("user", UserSchema);
+export const UserModel = model("user", UserSchema);
