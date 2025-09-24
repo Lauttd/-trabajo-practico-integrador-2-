@@ -91,34 +91,36 @@ export const getProfile = async (req, res) => {
   const { user_id } = req.userdata;
   try {
     const obtenerProfile = await UserModel.findById(user_id, { profile: true });
-    
-    return res.status(200).json({msg: "se obtuvo el perfil autenticado"});
+
+    return res.status(200).json({ msg: "se obtuvo el perfil autenticado" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({msg: "Error por parte del servidor"});
+    return res.status(500).json({ msg: "Error por parte del servidor" });
   }
 };
 
 export const updateProfile = async (req, res) => {
-    const { user_id } = req.userdata;
-    const { firstName, lastName, biography, avatarUrl, birthDate } = req.body;
-    try {
-      const actualizarProfile = await UserModel.findByIdAndUpdate(user_id 
-        {
+  const { user_id } = req.userdata;
+  const { firstName, lastName, biography, avatarUrl, birthDate } = req.body;
+  try {
+    const actualizarProfile = await UserModel.findByIdAndUpdate(
+      user_id,
+      {
         $set: {
-          firstName,
-          lastName,
-          biography,
-          avatarUrl,
-          birthDate,
+          "profile.firstName": firstName,
+          "profile.lastName": lastName,
+          "profile.biography": biography,
+          "profile.avatarUrl": avatarUrl,
+          "profile.birthDate": birthDate,
         },
       },
       { new: true }
     );
 
-    return res.status(200).json({ msg: "Perfil actualizado", data: actualizarProfile});
-
-    } catch (error) {
-      return res.status(500).json({msg: "Error por parte del servidor"});
-    }
+    return res
+      .status(200)
+      .json({ msg: "Perfil actualizado", data: actualizarProfile });
+  } catch (error) {
+    return res.status(500).json({ msg: "Error por parte del servidor" });
+  }
 };
