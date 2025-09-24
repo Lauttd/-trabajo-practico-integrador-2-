@@ -41,6 +41,10 @@ export const UserSchema = new Schema({
       type: Date,
     },
   },
+  deleteAt: {
+    type: Date,
+    default: null,
+  },
 });
 
 //Aca usamos el virtual

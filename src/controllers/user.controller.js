@@ -1,8 +1,4 @@
 import { UserModel } from "../models/user.model.js";
-import { ArticleModel } from "../models/article.model.js";
-import { CommentModel } from "../models/comment.model.js";
-import { use } from "react";
-import { selectFields } from "express-validator/lib/field-selection.js";
 
 //Aca obtenemos todos los usuarios con sus articulos.
 export const getAllUser = async (req, res) => {
@@ -64,7 +60,9 @@ export const updateUser = async (req, res) => {
 //Eliminamos usuario => eliminacion fisica del usuario.
 export const deleteUser = async (req, res) => {
   try {
-    const deleteUsuario = await UserModel.findByIdDelete(req.params.id);
+    const deleteUsuario = await UserModel.findByIdUpdate(req.params.id, {
+      deleteAt: Date.now(),
+    });
     if (!deleteUsuario) {
       return res.status(404).json({ msg: "No se encontro el usuario" });
     }
