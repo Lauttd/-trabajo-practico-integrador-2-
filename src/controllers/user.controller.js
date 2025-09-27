@@ -2,6 +2,7 @@ import { matchedData } from "express-validator";
 import { UserModel } from "../models/user.model.js";
 import { selectFields } from "express-validator/lib/field-selection.js";
 
+<<<<<<< HEAD
 export const getAllUserArticles = async (req, res) => {
   try {
     const user = await UserModel.find(
@@ -50,9 +51,49 @@ export const getByIdUserArticles = async (req, res) => {
     return res.status(500).json({ msg: "Error por parte del servidor" });
   }
 };
+=======
+//Aca obtenemos todos los usuarios con sus articulos.
+export const getAllUser = async (req, res) => {
+  try {
+    const users = UserModel.find().populate({
+      path: "articles",
+      select: "title status",
+    });
 
+    return res.status(200).json({ data: users });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Error por parte del servidor" }, error);
+  }
+};
+
+export const getByIdUser = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.id).populate({
+      path: "articles",
+      select: "title content",
+      populate: {
+        path: "comments",
+        select: "content author",
+      },
+    });
+>>>>>>> 1ce65ab651311a69a6124884cd1c1c92531d7149
+
+    if (!user) {
+      return res.status(404).json({ msg: "Usuario no encontrado" });
+    }
+
+    return res.status(200).json({ data: user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Error por parte del servidor" });
+  }
+};
+
+//Actualizar usuario.
 export const updateUser = async (req, res) => {
   try {
+<<<<<<< HEAD
   } catch (error) {
     console.log(error);
     return res.status(500).json({ msg: "Error por parte del servidor" });
@@ -64,4 +105,38 @@ export const deleteUser = async (req, res) => {
     console.log(error);
     return res.status(500).json({ msg: "Error por parte del servidor" });
   } catch (error) {}
+=======
+    const updateUser = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    if (!updateUser) {
+      return res.status(404).json({ msg: "Usuario no encontrado" });
+    }
+
+    res.status(200).json({ data: updateUser });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Error por parte del servidor" });
+  }
+};
+
+//Eliminamos usuario => eliminacion fisica del usuario.
+export const deleteUser = async (req, res) => {
+  try {
+    const deleteUsuario = await UserModel.findByIdUpdate(req.params.id, {
+      deleteAt: Date.now(),
+    });
+    if (!deleteUsuario) {
+      return res.status(404).json({ msg: "No se encontro el usuario" });
+    }
+
+    res.status(200).json({ msg: "Se elimino el usuario correctamente" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Error por parte del servidor" });
+  }
+>>>>>>> 1ce65ab651311a69a6124884cd1c1c92531d7149
 };
