@@ -1,5 +1,5 @@
-import { Schema } from "mongoose";
-import { type } from "os";
+import { Schema, model } from "mongoose";
+
 
 export const ArticleSchema = new Schema(
   {
@@ -35,4 +35,4 @@ export const ArticleSchema = new Schema(
   }
 );
 
-export const ArticleModel = mongoose.model("article", ArticleSchema);
+export const ArticleModel = model("article", ArticleSchema);

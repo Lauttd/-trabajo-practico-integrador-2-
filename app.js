@@ -5,6 +5,7 @@ import { userRoutes } from "./src/routes/user.routes.js";
 import { tagRoutes } from "./src/routes/tag.routes.js";
 import { articleRutes } from "./src/routes/article.routes.js";
 import dotenv from "dotenv";
+import { authRoutes } from "./src/routes/auth.routes.js";
 
 dotenv.config();
 const app = express();
@@ -12,10 +13,11 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 
-app.use("/", userRoutes);
-app.use("/", tagRoutes);
-app.use("/", commentRoutes);
-app.use("/", articleRutes);
+app.use("/api", authRoutes);
+app.use("/api", userRoutes);
+app.use("/api", tagRoutes);
+app.use("/api", commentRoutes);
+app.use("/api", articleRutes);
 
 app.listen(PORT, async () =>{
     await connectDB();
