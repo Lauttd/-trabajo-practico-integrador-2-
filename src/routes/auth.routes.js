@@ -11,8 +11,27 @@ import {
 
 export const authRoutes = Router();
 
-authRoutes.post("/auth/register", createRegister);
-authRoutes.get("/auth/profile/:id", getProfile);
-authRoutes.post("/auth/login", login);
-authRoutes.post("/auth/logout", logout);
-authRoutes.put("/auth/profile/:id", updateProfile);
+import { applyValidations } from "../middlewares/validator.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import {
+  registerValidations,
+  updateAuthProfileValidations,
+} from "../middlewares/validations/auth.validations.js";
+
+export const authRouter = Router();
+authRouter.post(
+  "/auth/register",
+  registerValidations,
+  applyValidations,
+  createRegister
+);
+authRouter.post("/auth/login", login);
+authRouter.post("/auth/logout", authMiddleware, logout);
+authRouter.get("/auth/profile", authMiddleware, getProfile);
+authRouter.put(
+  "/auth/profile",
+  authMiddleware,
+  updateAuthProfileValidations,
+  applyValidations,
+  updateProfile
+);
