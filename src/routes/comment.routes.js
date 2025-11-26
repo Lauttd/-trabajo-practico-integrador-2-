@@ -1,58 +1,18 @@
 import { Router } from "express";
-import {
-  createComment,
-  getAllComment,
-  getCommentsLog,
-  updateComment,
-  deleteComment,
-} from "../controllers/comment.controller.js";
-
-export const commentRoutes = Router();
-
+import { createCommentValidations } from "../middlewares/validator/comment.validations.js";
+import { applyValidations } from "../middlewares/validator/applyValidations.js";
+import { createComment, deleteComment, getAllComment, getCommentsLog, updateComment } from "../controllers/comment.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
-import { ownerOrAdminCommentMiddleware } from "../middlewares/ownerOrAdmin.middleware.js";
-import {
-  createCommentValidations,
-  deleteCommentValidations,
-  getArticleCommentsValidations,
-  updateCommentValidations,
-} from "../middlewares/validations/comment.validations.js";
-import { applyValidations } from "../middlewares/validator.js";
+import { updateCommentValidations } from "../middlewares/validator/comment.validations.js";
+import {ownerOrAdminMiddleware} from "../middlewares/ownerOrAdmin.middleware.js"
+import { paramArticleIdValidator, paramValidator } from "../middlewares/param.validations.js";
 
-export const commentRouter = Router();
+export const commentRouter = Router()
 
-commentRouter.post(
-  "/comments",
-  authMiddleware,
-  createCommentValidations,
-  applyValidations,
-  createComment
-);
+commentRouter.use(authMiddleware)
 
-// Traer el articulo de un comment
-commentRouter.get(
-  "/comments/article/:articleId",
-  getArticleCommentsValidations,
-  applyValidations,
-  getAllComment 
-);
-
-commentRouter.get("/comments/my", authMiddleware, getMyComments);
-
-commentRouter.put(
-  "/comments/:id",
-  updateCommentValidations,
-  applyValidations,
-  authMiddleware,
-  ownerOrAdminCommentMiddleware,
-  updateComment
-);
-
-commentRouter.delete(
-  "/comments/:id",
-  deleteCommentValidations,
-  applyValidations,
-  authMiddleware,
-  ownerOrAdminCommentMiddleware,
-  deleteComment
-);
+commentRouter.post("/comments", createCommentValidations, applyValidations, createComment)
+commentRouter.get("/comments/article/:articleId", paramArticleIdValidator, applyValidations, getAllComment)
+commentRouter.get("/comments/my", getCommentsLog)
+commentRouter.put("/comments/:id", paramValidator,updateCommentValidations, applyValidations, ownerOrAdminMiddleware, updateComment)
+commentRouter.delete("/comments/:id", paramValidator, applyValidations, ownerOrAdminMiddleware, deleteComment)

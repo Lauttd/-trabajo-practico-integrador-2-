@@ -1,37 +1,15 @@
 import { Router } from "express";
-
-import {
-  createRegister,
-  getProfile,
-  login,
-  logout,
-  updateProfile,
-} from "../controllers/auth.controller.js";
-
-
-export const authRoutes = Router();
-
-import { applyValidations } from "../middlewares/validator.js";
+import { getProfile, login, logout, createRegister, updateProfile } from "../controllers/auth.controller.js";
+import { userValidations } from "../middlewares/validator/user.validations.js";
+import { applyValidations } from "../middlewares/validator/applyValidations.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
-import {
-  registerValidations,
-  updateAuthProfileValidations,
-} from "../middlewares/validations/auth.validations.js";
+import { loginValidations } from "../middlewares/validator/login.validations.js";
+import { updateProfileValidations } from "../middlewares/validator/updateProfile.validations.js";
 
-export const authRouter = Router();
-authRouter.post(
-  "/auth/register",
-  registerValidations,
-  applyValidations,
-  createRegister
-);
-authRouter.post("/auth/login", login);
-authRouter.post("/auth/logout", authMiddleware, logout);
-authRouter.get("/auth/profile", authMiddleware, getProfile);
-authRouter.put(
-  "/auth/profile",
-  authMiddleware,
-  updateAuthProfileValidations,
-  applyValidations,
-  updateProfile
-);
+export const authRouter = Router()
+
+authRouter.post("/auth/register", userValidations, applyValidations, createRegister)
+authRouter.post("/auth/login", loginValidations, applyValidations, login)
+authRouter.post("/auth/logout", authMiddleware, logout)
+authRouter.get("/auth/profile", authMiddleware, getProfile)
+authRouter.put("/auth/profile", authMiddleware, updateProfileValidations, applyValidations, updateProfile)

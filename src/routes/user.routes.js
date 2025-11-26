@@ -1,52 +1,16 @@
 import { Router } from "express";
-import {
-  getAllUserArticles,
-  getByIdUserArticles,
-  updateUser,
-  deleteUser,
-} from "../controllers/user.controller.js";
-
-export const userRoutes = Router();
-
-// Middlewares
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { adminMiddleware } from "../middlewares/admin.middleware.js";
-import {
-  deleteUserValidations,
-  getUserByIdValidations,
-  updateUserValidations,
-} from "../middlewares/validations/user.validations.js";
-import { applyValidations } from "../middlewares/validator.js";
+import { deleteUser, getAllUserArticles, getByIdUserArticles, updateUser } from "../controllers/user.controller.js";
+import { applyValidations } from "../middlewares/validator/applyValidations.js";
+import { updateUserValidations } from "../middlewares/validator/updateUser.validations.js";
+import { paramValidator } from "../middlewares/param.validations.js";
 
-// Solo un admin puede traer todos los usuarios
-userRoutes.get("/users", authMiddleware, adminMiddleware, getAllUserArticles);
+export const userRouter = Router()
 
-// Solo un admin puede tarer un usuario por ID
-userRoutes.get(
-  "/users/:id",
-  authMiddleware,
-  adminMiddleware,
-  getUserByIdValidations,
-  applyValidations,
-  getByIdUserArticles
-);
+userRouter.use(authMiddleware)
 
-// Solo un admin puede borrar un usuario
-userRoutes.delete(
-  "/users/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteUserValidations,
-  applyValidations,
-  deleteUser
-);
-
-// Solo un admin puede actualizar un usuario
-userRoutes.put(
-  "/users/:id",
-  authMiddleware,
-  adminMiddleware,
-  updateUserValidations,
-  applyValidations,
-  updateUser
-);
+userRouter.get("/users", adminMiddleware, getAllUserArticles)
+userRouter.get("/users/:id", paramValidator, applyValidations, adminMiddleware, getByIdUserArticles)
+userRouter.put("/users/:id", paramValidator, updateUserValidations, adminMiddleware, applyValidations, updateUser)
+userRouter.delete("/users/:id", paramValidator, applyValidations, adminMiddleware, deleteUser)

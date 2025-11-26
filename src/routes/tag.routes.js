@@ -1,64 +1,18 @@
 import { Router } from "express";
-import {
-  createTag,
-  getAllTag,
-  getByIdTag,
-  updateTag,
-  deleteTag,
-} from "../controllers/tag.controller.js";
-
-export const tagRoutes = Router();
-
+import { createTag, deleteTag, getAllTag, getByIdTag, updateTag } from "../controllers/tag.controller.js";
+import { createTagValidations } from "../middlewares/validator/tag.validations.js";
+import { applyValidations } from "../middlewares/validator/applyValidations.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { adminMiddleware } from "../middlewares/admin.middleware.js";
-import {
-  createTagValidations,
-  deleteTagValidations,
-  getTagValidations,
-  updateTagValidations,
-} from "../middlewares/validations/tag.validations.js";
-import { applyValidations } from "../middlewares/validator.js";
+import { updateTagValidations } from "../middlewares/validator/tag.validations.js";
+import { paramValidator } from "../middlewares/param.validations.js";
 
-export const tagRouter = Router();
+export const tagRouter = Router()
 
-// Solo un admin puede crear una tag
-tagRouter.post(
-  "/tags",
-  authMiddleware,
-  adminMiddleware,
-  createTagValidations,
-  applyValidations,
-  createTag
-);
+tagRouter.use(authMiddleware)
 
-// Solo un usuario autenticado puede traer todas las tags
-tagRouter.get("/tags", authMiddleware, getAllTags);
-
-// Solo un usuario autenticado puede traer una tag por ID
-tagRouter.get(
-  "/tags/:id",
-  authMiddleware,
-  getTagValidations,
-  applyValidations,
-  getByIdTag
-);
-
-// Solo un admin puede actualizar una tag
-tagRouter.put(
-  "/tags/:id",
-  authMiddleware,
-  adminMiddleware,
-  updateTagValidations,
-  applyValidations,
-  updateTag
-);
-
-// Solo un admin puede borrar una tag
-tagRouter.delete(
-  "/tags/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteTagValidations,
-  applyValidations,
-  deleteTag
-);
+tagRouter.post("/tags", adminMiddleware, createTagValidations, applyValidations, createTag)
+tagRouter.get("/tags", getAllTag)
+tagRouter.get("/tags/:id",paramValidator, applyValidations, getByIdTag)
+tagRouter.put("/tags/:id", paramValidator, applyValidations, adminMiddleware, updateTagValidations, applyValidations, updateTag)
+tagRouter.delete("/tags/:id", paramValidator, applyValidations, adminMiddleware, deleteTag)
